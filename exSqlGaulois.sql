@@ -67,3 +67,9 @@ ORDER BY coutTotal DESC;
 
 
 -- 7. Nom des ingrédients + coût + quantité de chaque ingrédient qui composent la potion 'Santé'.
+
+SELECT *
+FROM composer
+INNER JOIN ingredient ON composer.id_ingredient = ingredient.id_ingredient
+INNER JOIN potion ON composer.id_potion = potion.id_potion
+WHERE nom_potion = "Santé"	
