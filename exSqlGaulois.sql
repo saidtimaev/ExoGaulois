@@ -18,7 +18,7 @@ SELECT nom_lieu, COUNT(nom_personnage) AS NombrePersonnages
 FROM personnage
 INNER JOIN lieu ON personnage.id_lieu = lieu.id_lieu
 GROUP BY personnage.id_lieu
-ORDER BY COUNT(nom_personnage) DESC
+ORDER BY NombrePersonnages DESC
 
 
 
@@ -36,11 +36,11 @@ ORDER BY nom_lieu, nom_personnage
 -- personnages décroissant).
 
 
-SELECT nom_specialite, COUNT(nom_personnage) AS nbPersonnages
+SELECT nom_specialite, COUNT(personnage.id_specialite) AS nbPersonnages
 FROM personnage
 INNER JOIN specialite ON personnage.id_specialite = specialite.id_specialite
-GROUP BY nom_specialite
-ORDER BY COUNT(nom_personnage) DESC
+GROUP BY specialite.id_specialite
+ORDER BY nbPersonnages DESC
 
 
 
@@ -57,14 +57,12 @@ ORDER BY date_bataille DESC
 -- 6. Nom des potions + coût de réalisation de la potion (trié par coût décroissant).
 
 
-SELECT DISTINCT(nom_potion), SUM(qte * cout_ingredient) AS CoutTotal
+SELECT nom_potion, SUM(qte * cout_ingredient) AS CoutTotal
 FROM potion
 LEFT JOIN composer ON potion.id_potion = composer.id_potion
 LEFT JOIN ingredient ON composer.id_ingredient = ingredient.id_ingredient
-GROUP BY nom_potion
+GROUP BY potion.id_potion
 ORDER BY coutTotal DESC;
-
-
 
 
 -- 7. Nom des ingrédients + coût + quantité de chaque ingrédient qui composent la potion 'Santé'.
@@ -73,7 +71,7 @@ SELECT nom_ingredient AS nom, cout_ingredient AS cout, qte
 FROM composer
 INNER JOIN ingredient ON composer.id_ingredient = ingredient.id_ingredient
 INNER JOIN potion ON composer.id_potion = potion.id_potion
-WHERE nom_potion = "Santé"
+WHERE potion.id_potion = 3
 
 
 -- 8. Nom du ou des personnages qui ont pris le plus de casques dans la bataille 'Bataille du village 
@@ -83,14 +81,14 @@ SELECT nom_personnage, SUM(qte) AS nbBatailles
 FROM prendre_casque
 INNER JOIN personnage ON prendre_casque.id_personnage = personnage.id_personnage
 INNER JOIN bataille ON prendre_casque.id_bataille = bataille.id_bataille
-WHERE nom_bataille = "Bataille du village gaulois"
+WHERE bataille.id_bataille = 1
 GROUP BY prendre_casque.id_personnage
 HAVING nbBatailles >= ALL(
 	SELECT SUM(qte) AS nbBatailles
 	FROM prendre_casque
 	INNER JOIN personnage ON prendre_casque.id_personnage = personnage.id_personnage
 	INNER JOIN bataille ON prendre_casque.id_bataille = bataille.id_bataille
-	WHERE nom_bataille = "Bataille du village gaulois"
+	WHERE bataille.id_bataille = 1
 	GROUP BY prendre_casque.id_personnage
 )
 
@@ -99,6 +97,14 @@ HAVING nbBatailles >= ALL(
 -- 9. Nom des personnages et leur quantité de potion bue (en les classant du plus grand buveur 
 -- au plus petit).
 
+SELECT nom_personnage, SUM(dose_boire) AS potionsBues
+FROM boire 
+INNER JOIN personnage ON boire.id_personnage = personnage.id_personnage
+GROUP BY boire.id_personnage
+ORDER BY potionsBues DESC
+
+
+-- 10. Nom de la bataille où le nombre de casques pris a été le plus important.
 
 SELECT nom_bataille, SUM(qte) AS casquesPris
 FROM prendre_casque
@@ -110,18 +116,6 @@ HAVING casquesPris >= ALL(
 	INNER JOIN bataille ON prendre_casque.id_bataille = bataille.id_bataille
 	GROUP BY prendre_casque.id_bataille
 )
-
-
-
-
--- 10. Nom de la bataille où le nombre de casques pris a été le plus important.
-
-
-SELECT nom_bataille, SUM(qte) AS casquesPris
-FROM prendre_casque
-INNER JOIN bataille ON prendre_casque.id_bataille = bataille.id_bataille
-GROUP BY prendre_casque.id_bataille
-ORDER BY casquesPris DESC
 
 
 -- 11. Combien existe-t-il de casques de chaque type et quel est leur coût total ? (classés par 
@@ -144,6 +138,10 @@ INNER JOIN ingredient ON composer.id_ingredient = ingredient.id_ingredient
 INNER JOIN potion ON composer.id_potion = potion.id_potion
 WHERE nom_ingredient = "Poisson frais"
 
+SELECT nom_potion
+FROM composer
+INNER JOIN potion ON composer.id_potion = potion.id_potion
+WHERE id_ingredient = 24
 
 
 -- 13. Nom du / des lieu(x) possédant le plus d'habitants, en dehors du village gaulois.
@@ -171,6 +169,12 @@ FROM boire
 RIGHT JOIN personnage ON boire.id_personnage = personnage.id_personnage
 WHERE id_potion IS NULL
 
+SELECT nom_personnage
+FROM personnage
+WHERE personnage.id_personnage NOT IN(
+    SELECT boire.id_personnage
+    FROM boire
+)
 
 
 -- 15. Nom du / des personnages qui n'ont pas le droit de boire de la potion 'Magique'.
@@ -208,8 +212,13 @@ VALUES(
 -- C. Supprimez les casques grecs qui n'ont jamais été pris lors d'une bataille.
 
 
-DELETE FROM casque WHERE id_casque NOT IN (SELECT id_casque FROM prendre_casque)
-
+DELETE FROM casque 
+WHERE id_casque NOT IN (
+	SELECT id_casque FROM prendre_casque
+)
+AND id_casque = (
+	SELECT id_casque FROM type_casque WHERE id_type_casque = 2
+)
 
 -- D. Modifiez l'adresse de Zérozérosix : il a été mis en prison à Condate.
 
