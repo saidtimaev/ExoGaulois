@@ -25,7 +25,7 @@ ob_start();
                     echo "<table>",
                         "<thead>",
                             "<tr>",
-                                "<th>#</th>",
+                                
                                 "<th >Nom</th>",
                                 "<th >Lieu</th>",
                                 "<th >Spécialité</th>",
@@ -38,7 +38,7 @@ ob_start();
                     // Boucle qui permet d'afficher les Gaulois
                     foreach($personnages as $personnage){
                         echo "<tr>",
-                                "<td>".$personnage["id_personnage"]."</td>",
+                                
                                 "<td>".$personnage["nom_personnage"]."</td>",
                                 "<td>".$personnage["nom_lieu"]."</td>",
                                 "<td>".$personnage["nom_specialite"]."</td>",
