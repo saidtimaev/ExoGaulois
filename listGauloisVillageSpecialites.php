@@ -4,6 +4,9 @@ include "config/mysql.php";
 include "databaseconnect.php";
 
 
+?>
+
+<?php
 // On récupère tout le contenu de la table personnage
 $sqlQuery = '
             SELECT id_personnage, nom_personnage, nom_lieu, nom_specialite
@@ -17,7 +20,7 @@ $personnageStatement = $mysqlClient->prepare($sqlQuery);
 $personnageStatement->execute();
 $personnages = $personnageStatement->fetchAll();
 
-                
+ob_start();                
                     // Début table
                     echo "<table>",
                         "<thead>",
@@ -40,15 +43,24 @@ $personnages = $personnageStatement->fetchAll();
                                 "<td>".$personnage["nom_lieu"]."</td>",
                                 "<td>".$personnage["nom_specialite"]."</td>",
                             "</tr>";
-                        
-                       
-                        
 
                     }
                     echo    "</tbody>",
                             "</table";
                             // Fin tableau
 
+$content = ob_get_clean();
                             
+?>
+
+<?php
+
+$titrePage = "Liste Gaulois, Villages, Spécialités";
+
+$pageActive = '<li><a class="nav-link" href="listGaulois.php">Liste Gaulois</a></li>
+<li><a class="nav-link active" href="listGauloisVillageSpecialites.php">Liste Gaulois, villages et spécialités</a></li>
+<li><a class="nav-link" href="listVillages.php">Liste villages</a></li>';
+
+require_once "template.php";
                 
-            ?>
+?>           

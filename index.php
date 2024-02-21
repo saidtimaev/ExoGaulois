@@ -1,19 +1,13 @@
 <?php
 
-include "config/mysql.php";
-include "databaseconnect.php";
-include "variables.php";
+$titrePage = "Page d'accueil";
 
+$pageActive = '<li><a class="nav-link" href="listGaulois.php">Liste Gaulois</a></li>
+<li><a class="nav-link active" href="listGauloisVillageSpecialites.php">Liste Gaulois, villages et spécialités</a></li>
+<li><a class="nav-link" href="listVillages.php">Liste villages</a></li>';
 
-$insererPotion = 'INSERT INTO potion(nom_potion) VALUES (:nom_potion)';
+$content = '<h1>Bienvenue sur le site dédié à l\'univers des Gaulois</h1>
+            <p>Vous pouvez ici retrouver les informations sur le monde des Gaulois</p>';
 
-$potionStatement = $mysqlClient->prepare($insererPotion);
-
-$potionStatement->execute([
-    'nom_potion' => 'Test1',
-]);
-
-
-
-
-?>
+require_once "template.php";
+            
