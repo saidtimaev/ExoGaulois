@@ -3,22 +3,26 @@
 include "config/mysql.php";
 include "databaseconnect.php";
 
-
+// $sqlQuery = 'SELECT DISTINCT lieu.id_lieu, nom_lieu, nom_personnage,  nom_bataille
+//             FROM lieu
+//             LEFT JOIN bataille ON lieu.id_lieu = bataille.id_lieu
+//             INNER JOIN personnage ON lieu.id_lieu = personnage.id_lieu
+//             WHERE lieu.id_lieu = :id_lieu
+//             ';
 
 // On récupère tout le contenu de la table personnage
-$sqlQuery = 'SELECT DISTINCT lieu.id_lieu, nom_lieu, nom_personnage,  nom_bataille
+$sqlQuery1 = 'SELECT DISTINCT lieu.id_lieu, nom_lieu, nom_personnage
             FROM lieu
-            LEFT JOIN bataille ON lieu.id_lieu = bataille.id_lieu
             INNER JOIN personnage ON lieu.id_lieu = personnage.id_lieu
             WHERE lieu.id_lieu = :id_lieu
             ';
             
-$villageStatement = $mysqlClient->prepare($sqlQuery);
+$villageStatement = $mysqlClient->prepare($sqlQuery1);
 $villageStatement->execute([
     'id_lieu' => $_GET['id'],
 ]);
 $villages = $villageStatement->fetchAll();
-var_dump($villages);
+// var_dump($villages);
 
 
 
@@ -34,20 +38,28 @@ foreach($villages as $village) {
 
 // var_dump($villages);
 echo "<br>Batailles qui ont eu lieu dans ce village : <br>";
-foreach($villages as $village) {
 
-    if ($village['nom_bataille' == null]){
+$sqlQuery2 = 'SELECT DISTINCT nom_bataille
+            FROM lieu
+            LEFT JOIN bataille ON lieu.id_lieu = bataille.id_lieu
+            WHERE lieu.id_lieu = :id_lieu
+            ';
+            
+$villageBataillesStatement = $mysqlClient->prepare($sqlQuery2);
+$villageBataillesStatement->execute([
+    'id_lieu' => $_GET['id'],
+]);
+$villageBatailles = $villageBataillesStatement->fetchAll();
 
-        echo "Aucune bataille n'a eu lieu dans ce village";
+foreach($villageBatailles as $villageBataille) {
 
+    if ($villageBataille['nom_bataille'] == null){
+        echo "Aucune";
     } else {
         
-        echo "<li>".$village['nom_bataille']."</li>";
-
+        echo "<li>".$villageBataille['nom_bataille']."</li>";
     }
-
-    };
-            
-
+    
+};
 
 ?>
