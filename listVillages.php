@@ -20,22 +20,21 @@ $villages = $villagesStatement->fetchAll();
 // var_dump($villages);
 ob_start();                
                     // Début table
-                    echo "<table class='table table-striped'",
-                        "<thead>",
+                    echo "<table class='table table-light table-striped table-bordered border-primary'>",
+                        "<thead class='table-dark'>",
                             "<tr>",
-                                "<th >Nom</th>",
-                                "<th >Nombre d'habitants</th>",
+                                "<th scope='col'>Nom</th>",
+                                "<th scope='col'>Nombre d'habitants</th>",
                             "</tr>",
                         "</thead>",
                         "<tbody>";
-                    
                     
 
                     // Boucle qui permet d'afficher les Gaulois
                     foreach($villages as $village){
                         echo "<tr>",
-                                "<td><a href='infoVillage.php?id=".$village['id_lieu']."'>".$village['nom_lieu']."</a></td>",
-                                "<td>".$village["NombrePersonnages"]."</td>",
+                                "<td scope='row'><a href='infoVillage.php?id=".$village['id_lieu']."'>".$village['nom_lieu']."</a></td>",
+                                "<td scope='row'>".$village["NombrePersonnages"]."</td>",
                             "</tr>";
                         
                        
@@ -50,9 +49,9 @@ $content = ob_get_clean();
                             
 $titrePage = "Liste Gaulois, Villages, Spécialités";
 
-$pageActive = '<li><a class="nav-link" href="listGaulois.php">Liste Gaulois</a></li>
-<li><a class="nav-link active" href="listGauloisVillageSpecialites.php">Liste Gaulois, villages et spécialités</a></li>
-<li><a class="nav-link" href="listVillages.php">Liste villages</a></li>';
+$pageActive = '<li class="nav-item mx-4"><a class="nav-link" href="listGaulois.php">Liste Gaulois</a></li>
+<li class="nav-item mx-4"><a class="nav-link "  href="listGauloisVillageSpecialites.php">Liste Gaulois, villages et spécialités</a></li>
+<li class="nav-item mx-4"><a class="nav-link active" aria-current="page" href="listVillages.php">Liste villages</a></li>';
 
 require_once "template.php";
                 

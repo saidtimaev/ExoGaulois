@@ -12,11 +12,14 @@
     <body >
         
             <header >
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <ul class="d-flex flex-row">
-                            <?= $pageActive ?>
-                    </ul>
-                </nav>
+                <div class="container containerNav">
+                    <nav class="navbar justify-content-center">
+                        <ul class="navbar-nav d-flex flex-row">
+                                <?= $pageActive ?>
+                        </ul>
+                    </nav>
+                </div>
+                
             </header>
             <main>
             <?= $content ?>
