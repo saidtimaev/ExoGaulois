@@ -9,7 +9,7 @@ $sqlQuery = 'SELECT id_personnage, nom_personnage FROM personnage ORDER BY nom_p
 $personnageStatement = $mysqlClient->prepare($sqlQuery);
 $personnageStatement->execute();
 $personnages = $personnageStatement->fetchAll();
-
+// var_dump($personnages);
 ob_start();                 
                     // Début table
                     echo "<table>",
@@ -35,7 +35,7 @@ ob_start();
                     }
                     echo    "</tbody>",
                             "</table";
-                            // Fin tableau
+                            // Fin tableau  
 
 $content = ob_get_clean();
                             

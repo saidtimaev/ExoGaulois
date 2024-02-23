@@ -8,7 +8,7 @@
 
 header{
     height: 100px;
-    background-color: rgb(198, 255, 93);
+    /* background-color: rgb(198, 255, 93); */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,7 +34,7 @@ nav > ul {
 
 
 main table{
-    background-color: rgb(241, 255, 114);
+  
     width: 100%;
     border-collapse: collapse;
 }
@@ -49,5 +49,5 @@ main table td, main table th {
 
 main table th{
     text-align: center;
-    background-color: rgb(159, 255, 114);
+    /* background-color: rgb(159, 255, 114); */
 }

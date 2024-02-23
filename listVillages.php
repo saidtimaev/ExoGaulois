@@ -7,7 +7,7 @@ include "databaseconnect.php";
 
 // On récupère tout le contenu de la table personnage
 $sqlQuery = '
-            SELECT nom_lieu, COUNT(nom_personnage) AS NombrePersonnages
+            SELECT lieu.id_lieu, nom_lieu, COUNT(nom_personnage) AS NombrePersonnages
             FROM personnage
             INNER JOIN lieu ON personnage.id_lieu = lieu.id_lieu
             GROUP BY personnage.id_lieu
@@ -17,10 +17,10 @@ $sqlQuery = '
 $villagesStatement = $mysqlClient->prepare($sqlQuery);
 $villagesStatement->execute();
 $villages = $villagesStatement->fetchAll();
-
+// var_dump($villages);
 ob_start();                
                     // Début table
-                    echo "<table>",
+                    echo "<table class='table table-striped'",
                         "<thead>",
                             "<tr>",
                                 "<th >Nom</th>",
@@ -34,7 +34,7 @@ ob_start();
                     // Boucle qui permet d'afficher les Gaulois
                     foreach($villages as $village){
                         echo "<tr>",
-                                "<td>".$village["nom_lieu"]."</td>",
+                                "<td><a href='infoVillage.php?id=".$village['id_lieu']."'>".$village['nom_lieu']."</a></td>",
                                 "<td>".$village["NombrePersonnages"]."</td>",
                             "</tr>";
                         
