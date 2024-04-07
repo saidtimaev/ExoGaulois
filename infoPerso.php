@@ -4,7 +4,7 @@ include "config/mysql.php";
 include "databaseconnect.php";
 
 
-// On récupère tout le contenu de la table personnage
+// On récupère les infos d'un personnage
 $sqlQuery = 'SELECT DISTINCT personnage.id_personnage, nom_personnage, nom_lieu, nom_specialite, nom_bataille
             FROM personnage
             INNER JOIN specialite ON personnage.id_specialite = specialite.id_specialite

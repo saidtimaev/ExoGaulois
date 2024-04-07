@@ -10,7 +10,7 @@ include "databaseconnect.php";
 //             WHERE lieu.id_lieu = :id_lieu
 //             ';
 
-// On récupère tout le contenu de la table personnage
+// On récupère chaque personnage d'un lieu
 $sqlQuery1 = 'SELECT DISTINCT lieu.id_lieu, nom_lieu, nom_personnage
             FROM lieu
             INNER JOIN personnage ON lieu.id_lieu = personnage.id_lieu
@@ -29,6 +29,7 @@ $villages = $villageStatement->fetchAll();
 
 
 echo "Habitants du village : <br>";
+// Boucle qui va parcourir chaque personnage
 foreach($villages as $village) {
 
         echo "<li>".$village['nom_personnage']."</li>";
@@ -39,6 +40,7 @@ foreach($villages as $village) {
 // var_dump($villages);
 echo "<br>Batailles qui ont eu lieu dans ce village : <br>";
 
+// On recupère chaque bataille dans un lieu
 $sqlQuery2 = 'SELECT DISTINCT nom_bataille
             FROM lieu
             LEFT JOIN bataille ON lieu.id_lieu = bataille.id_lieu
@@ -51,6 +53,7 @@ $villageBataillesStatement->execute([
 ]);
 $villageBatailles = $villageBataillesStatement->fetchAll();
 
+// Boucle qui va parcourir chaque bataille
 foreach($villageBatailles as $villageBataille) {
 
     if ($villageBataille['nom_bataille'] == null){

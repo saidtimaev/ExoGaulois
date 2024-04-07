@@ -6,8 +6,12 @@ include "databaseconnect.php";
 
 // On récupère tout le contenu de la table personnage
 $sqlQuery = 'SELECT id_personnage, nom_personnage FROM personnage ORDER BY nom_personnage';
+
+// On instancie un objet de la classe PDO $mysqlClient sur lequel on appelle la méthode prepare() pour créer un statement préparé qu'on pourra utiliser avec différents parametres    
 $personnageStatement = $mysqlClient->prepare($sqlQuery);
+// Envoi la requete au serveur de la bdd pour exécution
 $personnageStatement->execute();
+//Retourne toutes les lignes retournées par la requete et les stock dans le tableau $personnages
 $personnages = $personnageStatement->fetchAll();
 // var_dump($personnages);
 ob_start();                 

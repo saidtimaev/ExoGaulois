@@ -31,6 +31,7 @@ ob_start();
                     
 
                     // Boucle qui permet d'afficher les Gaulois
+                    // On envoi avec la methode GET l'id du lieu à infoVillage.php
                     foreach($villages as $village){
                         echo "<tr>",
                                 "<td scope='row'><a href='infoVillage.php?id=".$village['id_lieu']."'>".$village['nom_lieu']."</a></td>",
